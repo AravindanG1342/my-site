@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birds from my Backyard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0b1a0e;
+      --bg-card: #111d13;
+      --bg-card-h: #162019;
+      --border: #2a3d2c;
+      --border-h: #b8882a;
+      --text: #e8e0cc;
+      --muted: #8a9488;
+      --accent: #b8882a;
+      --accent-lt: #d4a94a;
+      --tag-bg: rgba(184, 136, 42, 0.12);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Grain texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+    }
+
+    /* ─── Header ──────────────────────────────────────── */
+    header {
+      position: relative;
+      z-index: 1;
+      padding: 72px 48px 48px;
+      border-bottom: 1px solid var(--border);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header-meta {
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 300;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header-meta .dot {
+      width: 3px;
+      height: 3px;
+      background: var(--border-h);
+      border-radius: 50%;
+    }
+
+    /* ─── Filter bar ──────────────────────────────────── */
+    .filter-bar {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .filter-label {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-right: 8px;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      padding: 6px 16px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--border-h);
+      color: var(--accent-lt);
+    }
+
+    .filter-btn.active {
+      background: var(--tag-bg);
+      border-color: var(--accent);
+      color: var(--accent-lt);
+    }
+
+    /* ─── Grid ────────────────────────────────────────── */
+    .gallery {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 48px 48px 80px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    /* ─── Card ────────────────────────────────────────── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--border-h);
+      background: var(--bg-card-h);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(184, 136, 42, 0.15);
+    }
+
+    .card-photo {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.92) saturate(0.95);
+      transition: filter 0.3s ease;
+    }
+
+    .card:hover .card-photo {
+      filter: brightness(1) saturate(1.05);
+    }
+
+    .card-body {
+      padding: 20px 22px 22px;
+    }
+
+    .card-tag {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 400;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-tag::before {
+      content: '';
+      display: inline-block;
+      width: 16px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .card-common {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 500;
+      font-style: italic;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .card-scientific {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-style: italic;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .card-note {
+      font-size: 13px;
+      line-height: 1.65;
+      color: #a09888;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      padding: 12px 22px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-region {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+
+    .card-uncertain {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: #7a6a3a;
+      font-style: italic;
+    }
+
+    /* ─── Modal ───────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 12, 6, 0.92);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      max-width: 960px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      animation: modalIn 0.3s ease;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.97) translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .modal-photo-wrap {
+      position: relative;
+    }
+
+    .modal-photo {
+      width: 100%;
+      height: 100%;
+      min-height: 400px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .modal-content {
+      padding: 40px 36px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .modal-common {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 500;
+      font-style: italic;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .modal-scientific {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .modal-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--accent);
+      margin-bottom: 24px;
+      opacity: 0.6;
+    }
+
+    .modal-note {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #b0a898;
+      flex: 1;
+    }
+
+    .modal-actions {
+      margin-top: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .modal-wiki {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid rgba(184, 136, 42, 0.3);
+      padding: 8px 16px;
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+
+    .modal-wiki:hover {
+      background: var(--tag-bg);
+      border-color: var(--accent);
+    }
+
+    .modal-close {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      border-color: var(--muted);
+      color: var(--text);
+    }
+
+    .modal-uncertain-note {
+      margin-top: 16px;
+      font-size: 11px;
+      color: #7a6a3a;
+      font-style: italic;
+      padding: 8px 12px;
+      border: 1px solid rgba(122, 106, 58, 0.3);
+      border-radius: 2px;
+      background: rgba(122, 106, 58, 0.06);
+    }
+
+    /* ─── Footer ──────────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    .footer-count {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── About section ──────────────────────────────── */
+    .about {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 64px 48px;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+
+    .about-photo-wrap {
+      position: relative;
+    }
+
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      border-radius: 2px;
+      filter: grayscale(20%) brightness(0.9);
+      border: 1px solid var(--border);
+    }
+
+    .about-content {
+      padding-top: 4px;
+    }
+
+    .about-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .about-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .about-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 34px;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+
+    .about-bio {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #b0a898;
+      max-width: 540px;
+    }
+
+    .about-bio p+p {
+      margin-top: 14px;
+    }
+
+    @media (max-width: 720px) {
+      .about {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .about-photo-wrap {
+        max-width: 160px;
+      }
+    }
+
+    /* ─── Scrollbar ───────────────────────────────────── */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted);
+    }
+
+    /* ─── Site title ──────────────────────────────────── */
+    .site-title {
+      margin-bottom: 24px;
+    }
+
+    .site-subtitle {
+      font-family: 'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .site-name {
+      font-family: 'Cormorant Garamond', 'Palatino Linotype', Palatino, Georgia, serif;
+      font-size: 52px;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    /* ─── Touch targets ───────────────────────────────── */
+    .filter-btn {
+      min-height: 44px;
+    }
+
+    /* ─── Responsive ──────────────────────────────────── */
+    @media (max-width: 900px) {
+      .modal {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-photo {
+        min-height: 240px;
+        max-height: 50vw;
+      }
+    }
+
+    @media (max-width: 640px) {
+      header {
+        padding: 36px 20px 28px;
+      }
+
+      .site-title {
+        margin-bottom: 18px;
+      }
+
+      .site-name {
+        font-size: 40px;
+      }
+
+      .filter-bar {
+        padding: 14px 20px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 6px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .filter-bar::-webkit-scrollbar {
+        display: none;
+      }
+
+      .filter-label {
+        display: none;
+      }
+
+      .filter-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 8px 18px;
+      }
+
+      .gallery {
+        padding: 24px 16px 48px;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .header-meta {
+        font-size: 12px;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .card-body {
+        padding: 16px 16px 18px;
+      }
+
+      .card-footer {
+        padding: 10px 16px;
+      }
+
+      .modal {
+        max-height: 95vh;
+        margin: auto;
+      }
+
+      .modal-content {
+        padding: 24px 20px;
+      }
+
+      .modal-common {
+        font-size: 28px;
+      }
+
+      .modal-actions {
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+
+      .modal-close,
+      .modal-wiki {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .about {
+        padding: 40px 20px 48px;
+      }
+
+      footer {
+        padding: 24px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="site-title">
+      <p class="site-subtitle">A (few) Birds of South India</p>
+      <h1 class="site-name">Birds from my Backyard</h1>
+    </div>
+    <div class="header-meta">
+      <span>Aravindan Gopalakrishnan</span>
+      <span class="dot"></span>
+      <span>Bangalore · Karnataka · Kerala</span>
+      <span class="dot"></span>
+      <span id="species-count">— species</span>
+    </div>
+  </header>
+
+  <div class="filter-bar">
+    <span class="filter-label">Filter</span>
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="Bangalore">Bangalore</button>
+    <button class="filter-btn" data-filter="Karnataka">Karnataka</button>
+    <button class="filter-btn" data-filter="Kerala">Kerala</button>
+  </div>
+
+  <div class="gallery" id="gallery"></div>
+
+  <section class="about">
+    <div class="about-photo-wrap">
+      <img class="about-photo" src="Aravindan%20Profile.jpeg" alt="Aravindan Gopalakrishnan">
+    </div>
+    <div class="about-content">
+      <p class="about-eyebrow">About</p>
+      <h2 class="about-name">Aravindan Gopalakrishnan</h2>
+      <div class="about-bio">
+        <p>I am a product manager based in Bangalore. Birds are how I slow down — a reason to be outdoors, patient, and
+          paying attention.</p>
+        <p>I photograph them across Bangalore, the forests of Karnataka, and along the Kerala coast. This gallery is my
+          personal record of what I have found: one photograph and a few notes for each species.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-name">Aravindan Gopalakrishnan</span>
+    <span class="footer-count" id="footer-count"></span>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal">
+      <div class="modal-photo-wrap">
+        <img class="modal-photo" id="modal-photo" src="" alt="">
+      </div>
+      <div class="modal-content">
+        <p class="modal-eyebrow" id="modal-region"></p>
+        <h2 class="modal-common" id="modal-common"></h2>
+        <p class="modal-scientific" id="modal-scientific"></p>
+        <div class="modal-divider"></div>
+        <p class="modal-note" id="modal-note"></p>
+        <div id="modal-uncertain-wrap" style="display:none">
+          <p class="modal-uncertain-note" id="modal-uncertain"></p>
+        </div>
+        <div class="modal-actions">
+          <a class="modal-wiki" id="modal-wiki" href="#" target="_blank" rel="noopener">
+            Wikipedia ↗
+          </a>
+          <button class="modal-close" id="modal-close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ─────────────────────────────────────────────────────────────────────────
+    // SPECIES DATA — edit this section to update notes, regions, or Wikipedia links
+    // ─────────────────────────────────────────────────────────────────────────
+    const PHOTO_DIR = "Bird Photos Sample Mar 22 2026/";
+
+    const BIRDS = [
+      {
+        common: "Green Bee-eater",
+        scientific: "Merops orientalis",
+        region: "Karnataka",
+        photo: "DSC_1267.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Green_bee-eater",
+        note: "It sat absolutely still for just long enough. Everything about this bird seems designed for display — the long tail pin, the jewel-green plumage, the precise black mask. I have seen hundreds of them across Karnataka. I still stop every time.",
+        uncertain: null
+      },
+      {
+        common: "White-throated Kingfisher",
+        scientific: "Halcyon smyrnensis",
+        region: "Karnataka",
+        photo: "DSC03698.JPG",
+        wiki: "https://en.wikipedia.org/wiki/White-throated_kingfisher",
+        note: "You hear the loud, laughing call first — then catch a flash of electric blue disappearing into the trees. This one stayed. Despite its name, it hunts far from water just as often as near it: lizards, large insects, whatever moves below its perch.",
+        uncertain: null
+      },
+      {
+        common: "Yellow-eyed Babbler",
+        scientific: "Chrysomma sinense",
+        region: "Karnataka",
+        photo: "DSC03310.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Yellow-eyed_babbler",
+        note: "This bird is usually just a sound — a persistent buzzing from deep inside a thorny bush. Getting it out in the open, perched cleanly like this, felt like a small victory. The yellow eye, up close, is genuinely startling.",
+        uncertain: null
+      },
+      {
+        common: "Malabar Grey Hornbill",
+        scientific: "Ocyceros griseus",
+        region: "Karnataka",
+        photo: "DSC_0769.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Malabar_grey_hornbill",
+        note: "I heard it long before I saw it. The call is nasal, insistent, and carries deep into the forest. What I did not expect was how still it would sit once I found it — long enough for this shot. The female of this species seals herself inside a tree hollow to brood, leaving a gap just wide enough for the male to pass food through.",
+        uncertain: null
+      },
+      {
+        common: "White-browed Fantail",
+        scientific: "Rhipidura aureola",
+        region: "Karnataka",
+        photo: "DSC_1943.JPG",
+        wiki: "https://en.wikipedia.org/wiki/White-browed_fantail",
+        note: "It never stops moving. Most of my photographs of this bird are blurs — so this frame, tail fully fanned and feet on the ground, is one I am particularly glad I got. The fanning is not a performance; it is how the bird flushes insects out of the grass.",
+        uncertain: null
+      },
+      {
+        common: "Black-headed Oriole",
+        scientific: "Oriolus xanthornus",
+        region: "Karnataka",
+        photo: "DSC03609.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Black-hooded_oriole",
+        note: "The call reaches you first — a rich, liquid whistle from somewhere high in the canopy. Then you find the yellow, and it is brighter than you remembered. This one was eating, which is why it stayed put long enough for a close frame.",
+        uncertain: null
+      },
+      {
+        common: "Rufous Treepie",
+        scientific: "Dendrocitta vagabunda",
+        region: "Karnataka",
+        photo: "DSC_0705.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Rufous_treepie",
+        note: "Loud, confident, and impossible to ignore. The Rufous Treepie moves through the trees in a small noisy group, announcing itself constantly. It also mimics other birds with unnerving accuracy — you think you have heard something rare, and then the treepie gives itself away.",
+        uncertain: null
+      },
+      {
+        common: "Cattle Egret",
+        scientific: "Bubulcus ibis",
+        region: "Karnataka",
+        photo: "DSC03309.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Cattle_egret",
+        note: "A bird that has figured out how to go everywhere. Originally from Africa and Asia, it has since spread to every continent except Antarctica — following cattle, farming equipment, anything that disturbs the ground and sends insects flying. Here it is in a wildflower meadow in Karnataka, in full breeding plumage.",
+        uncertain: null
+      },
+      {
+        common: "Spotted Owlet",
+        scientific: "Athene brama",
+        region: "Karnataka",
+        photo: "DSC_0754.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Spotted_owlet",
+        note: "Most owls are night birds you never quite see. This one is the exception. Pairs of Spotted Owlets roost in the same tree hollow or old building for years — sometimes decades. Once you know where one lives in your neighbourhood, it is always there.",
+        uncertain: null
+      },
+      {
+        common: "Red-vented Bulbul",
+        scientific: "Pycnonotus cafer",
+        region: "Bangalore",
+        photo: "DSC_1166 (1).JPG",
+        wiki: "https://en.wikipedia.org/wiki/Red-vented_bulbul",
+        note: "The first bird I hear most mornings in Bangalore. It is everywhere, it is loud, and it does not apologise for either. The small red patch under the tail — the vent it is named for — is easy to miss until you are looking for it. Once you see it, you cannot unsee it.",
+        uncertain: null
+      },
+      {
+        common: "Jungle Myna",
+        scientific: "Acridotheres fuscus",
+        region: "Bangalore",
+        photo: "DSC_0688.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Jungle_myna",
+        note: "These two landed on a clay water pot in the garden and stayed long enough for a study. The one on the right, with the small tuft on its forehead, is the Jungle Myna. Its neighbour on the left is the Common Myna. They are often found together, going about their business with complete indifference to each other.",
+        uncertain: null
+      },
+      {
+        common: "Indian Peafowl",
+        scientific: "Pavo cristatus",
+        region: "Karnataka",
+        photo: "DSC03610.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Indian_peafowl",
+        note: "Everyone knows the male in full display. This is the rarer sight — male and female together, resting, with no performance intended. The female is a quieter bird in every sense, and often the more interesting one to watch.",
+        uncertain: null
+      },
+      {
+        common: "Asian Brown Flycatcher",
+        scientific: "Muscicapa dauurica",
+        region: "Karnataka",
+        photo: "DSC_1958.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Asian_brown_flycatcher",
+        note: "From October to March, this small bird arrives in Bangalore from its breeding grounds in Siberia. It picks a perch — often the same one each day — and does very little except watch. Then, in a flash, it is gone and back. Easy to walk past and miss entirely.",
+        uncertain: null
+      },
+      {
+        common: "Brown Shrike",
+        scientific: "Lanius cristatus",
+        region: "Karnataka",
+        photo: "DSC02032 (1).JPG",
+        wiki: "https://en.wikipedia.org/wiki/Brown_shrike",
+        note: "Another winter arrival from Siberia. It perches high and surveys below with the air of a bird that owns the territory — which, for that season, it does. Shrikes impale their prey on thorns, a habit so unexpected in a small bird that they earned the old name 'butcher birds'.",
+        uncertain: null
+      },
+      {
+        common: "Common Greenshank",
+        scientific: "Tringa nebularia",
+        region: "Karnataka",
+        photo: "DSC03629.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Common_greenshank",
+        note: "Five of them, standing on a beach with the composure of seasoned travellers — which they are. These birds breed in northern Europe and Siberia and spend our winter here. I find something quietly moving about that: birds that have crossed continents, standing on a Karnataka beach.",
+        uncertain: null
+      },
+      {
+        common: "Indian Pond Heron",
+        scientific: "Ardeola grayii",
+        region: "Karnataka",
+        photo: "DSC03680.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Indian_pond_heron",
+        note: "You walk past it a hundred times before you notice it. In this plumage — the streaked brown of the non-breeding season — it is nearly invisible at the water's edge. Then it takes off, and the wings are pure white. It is one of the best surprises in Indian birding.",
+        uncertain: null
+      },
+      {
+        common: "Ashy Prinia",
+        scientific: "Prinia socialis",
+        region: "Karnataka",
+        photo: "DSC_1271.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Ashy_prinia",
+        note: "Small, restless, and deeply underappreciated. The Ashy Prinia holds its long tail cocked upward like a flag and lives in the grassland edges where most people do not look. This shot was taken in early morning light in Karnataka — the warm glow made it worth stopping for.",
+        uncertain: null
+      },
+      {
+        common: "Malabar Whistling Thrush",
+        scientific: "Myophonus horsfieldii",
+        region: "Kerala",
+        photo: "DSC_0816.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Malabar_whistling_thrush",
+        note: "It is called the Whistling Schoolboy — a name earned by the loud, unhurried whistling that echoes along rocky hill streams in the Western Ghats. The sound carries much further than you would expect from a bird this size. This one was at Kuttikanam in Kerala, doing exactly that.",
+        uncertain: null
+      },
+      {
+        common: "Indian Robin",
+        scientific: "Copsychus fulicatus",
+        region: "Karnataka",
+        photo: "DSC_1282.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Indian_robin",
+        note: "A scrubby, open-country bird that has mastered the art of looking important. It runs a few paces, stops, looks around, runs again — with great seriousness of purpose. The rich chestnut-red underparts of the male are striking when you are close enough to see them.",
+        uncertain: "ID to be confirmed — standing on ploughed red laterite soil. Could also be a Paddyfield Pipit."
+      },
+      {
+        common: "Munias",
+        scientific: "Lonchura sp.",
+        region: "Karnataka",
+        photo: "DSC_1255.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Munia",
+        note: "A small flock moving through the grass stems in early morning light — too quick and too distant to identify with certainty. Munias find safety and warmth in numbers. The exact species will have to wait for a closer look.",
+        uncertain: "Exact munia species to be confirmed — birds are distant in this shot."
+      },
+      {
+        common: "Blue-tailed Bee-eater",
+        scientific: "Merops philippinus",
+        region: "Karnataka",
+        photo: "DSC03863.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Blue-tailed_bee-eater",
+        note: "Two of them, side by side above the water. This is the larger cousin of the Green Bee-eater — a winter visitor from Southeast Asia. Bee-eaters return to the same perch repeatedly after each hunt, which is what makes them possible to photograph. Patience, and a good branch.",
+        uncertain: null
+      },
+      {
+        common: "Indian White-eye",
+        scientific: "Zosterops palpebrosus",
+        region: "Karnataka",
+        photo: "DSC02666.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Indian_white-eye",
+        note: "A bird so small and so fast that most photographs of it are a yellow-green blur. This one paused, briefly, in some delicate foliage, and the white ring around the eye caught the light just right. Worth every patient minute.",
+        uncertain: null
+      }
+    ];
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Gallery rendering
+    // ─────────────────────────────────────────────────────────────────────────
+    const gallery = document.getElementById('gallery');
+    let activeFilter = 'all';
+
+    function renderGallery(filter) {
+      gallery.innerHTML = '';
+      const filtered = filter === 'all'
+        ? BIRDS
+        : BIRDS.filter(b => b.region === filter);
+
+      document.getElementById('species-count').textContent = BIRDS.length + ' species';
+      document.getElementById('footer-count').textContent =
+        (filter === 'all' ? BIRDS.length : filtered.length) + ' of ' + BIRDS.length + ' species shown';
+
+      filtered.forEach((bird, i) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.index = BIRDS.indexOf(bird);
+        card.innerHTML = `
+        <img class="card-photo" src="${PHOTO_DIR}${encodeURIComponent(bird.photo).replace(/%20/g, '%20')}" alt="${bird.common}" loading="lazy">
+        <div class="card-body">
+          <p class="card-tag">${bird.region}</p>
+          <h2 class="card-common">${bird.common}</h2>
+          <p class="card-scientific">${bird.scientific}</p>
+          <p class="card-note">${bird.note}</p>
+        </div>
+        <div class="card-footer">
+          <span class="card-region">${bird.region}</span>
+          ${bird.uncertain ? '<span class="card-uncertain">ID unconfirmed</span>' : ''}
+        </div>
+      `;
+        card.addEventListener('click', () => openModal(BIRDS.indexOf(bird)));
+        gallery.appendChild(card);
+
+        // Staggered fade-in
+        setTimeout(() => { card.classList.add('visible'); }, i * 60);
+      });
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Filter buttons
+    // ─────────────────────────────────────────────────────────────────────────
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.filter;
+        renderGallery(activeFilter);
+      });
+    });
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Modal
+    // ─────────────────────────────────────────────────────────────────────────
+    function openModal(index) {
+      const bird = BIRDS[index];
+      document.getElementById('modal-photo').src = PHOTO_DIR + bird.photo;
+      document.getElementById('modal-photo').alt = bird.common;
+      document.getElementById('modal-region').textContent = bird.region;
+      document.getElementById('modal-common').textContent = bird.common;
+      document.getElementById('modal-scientific').textContent = bird.scientific;
+      document.getElementById('modal-note').textContent = bird.note;
+      document.getElementById('modal-wiki').href = bird.wiki;
+
+      const uncertainWrap = document.getElementById('modal-uncertain-wrap');
+      if (bird.uncertain) {
+        document.getElementById('modal-uncertain').textContent = 'Note: ' + bird.uncertain;
+        uncertainWrap.style.display = 'block';
+      } else {
+        uncertainWrap.style.display = 'none';
+      }
+
+      document.getElementById('modal-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    document.getElementById('modal-overlay').addEventListener('click', e => {
+      if (e.target === document.getElementById('modal-overlay')) closeModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Init
+    // ─────────────────────────────────────────────────────────────────────────
+    renderGallery('all');
+  </script>
+
+  <!-- ─── Chat Widget ──────────────────────────────────────────────────────── -->
+  <style>
+    #chat-widget {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 1000;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+    }
+
+    #chat-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 28px;
+      padding: 13px 22px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55);
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    #chat-toggle:hover {
+      background: var(--accent-lt);
+      transform: translateY(-1px);
+    }
+
+    #chat-toggle svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    #chat-panel {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      bottom: calc(100% + 14px);
+      right: 0;
+      width: 360px;
+      height: 490px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.75);
+      overflow: hidden;
+    }
+
+    #chat-panel.open {
+      display: flex;
+    }
+
+    #chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .chat-header-title {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 300;
+    }
+
+    #chat-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1;
+      padding: 0 2px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    #chat-close:hover {
+      color: var(--text);
+    }
+
+    #chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .chat-welcome {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+      text-align: center;
+      margin: auto;
+      padding: 12px 4px;
+    }
+
+    .chat-msg {
+      max-width: 88%;
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-size: 13.5px;
+      line-height: 1.6;
+      word-wrap: break-word;
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+      background: rgba(184, 136, 42, 0.14);
+      border: 1px solid rgba(184, 136, 42, 0.28);
+      color: var(--text);
+    }
+
+    .chat-msg.bot {
+      align-self: flex-start;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .chat-typing {
+      align-self: flex-start;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 12px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .chat-typing span {
+      width: 6px;
+      height: 6px;
+      background: var(--muted);
+      border-radius: 50%;
+      animation: chatDot 1.3s infinite ease-in-out;
+    }
+
+    .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes chatDot {
+      0%, 60%, 100% { opacity: 0.25; transform: translateY(0); }
+      30% { opacity: 1; transform: translateY(-4px); }
+    }
+
+    #chat-input-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 14px;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    #chat-input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 9px 13px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #chat-input::placeholder {
+      color: var(--muted);
+    }
+
+    #chat-input:focus {
+      border-color: var(--accent);
+    }
+
+    #chat-input:disabled {
+      opacity: 0.6;
+    }
+
+    #chat-send {
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 4px;
+      padding: 9px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    #chat-send:hover:not(:disabled) {
+      background: var(--accent-lt);
+    }
+
+    #chat-send:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 640px) {
+      #chat-widget {
+        bottom: 18px;
+        right: 14px;
+      }
+
+      #chat-panel {
+        width: calc(100vw - 28px);
+        right: -6px;
+        height: 430px;
+      }
+    }
+  </style>
+
+  <div id="chat-widget">
+    <div id="chat-panel" role="dialog" aria-label="Chat with Aravindan's assistant">
+      <div id="chat-header">
+        <span class="chat-header-title">Ask me anything</span>
+        <button id="chat-close" aria-label="Close chat">&#215;</button>
+      </div>
+      <div id="chat-messages">
+        <p class="chat-welcome">Ask me about the birds in this gallery — where I spotted them, what they were doing, or what to look for. Happy to chat.</p>
+      </div>
+      <div id="chat-input-area">
+        <input id="chat-input" type="text" placeholder="What would you like to know?" autocomplete="off">
+        <button id="chat-send">Send</button>
+      </div>
+    </div>
+
+    <button id="chat-toggle" aria-label="Open chat" aria-expanded="false">
+      <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
+      </svg>
+      Ask me anything
+    </button>
+  </div>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('chat-toggle');
+      var panel = document.getElementById('chat-panel');
+      var closeBtn = document.getElementById('chat-close');
+      var input = document.getElementById('chat-input');
+      var sendBtn = document.getElementById('chat-send');
+      var messagesEl = document.getElementById('chat-messages');
+
+      var isOpen = false;
+      var isBusy = false;
+      var intakeDone = false;
+      var history = []; // full conversation history sent to the API on every turn
+
+      function openChat() {
+        isOpen = true;
+        panel.classList.add('open');
+        toggle.setAttribute('aria-expanded', 'true');
+        if (!intakeDone) input.focus();
+      }
+
+      function closeChat() {
+        isOpen = false;
+        panel.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+
+      toggle.addEventListener('click', function () {
+        isOpen ? closeChat() : openChat();
+      });
+
+      closeBtn.addEventListener('click', closeChat);
+
+      function addMessage(text, role) {
+        var welcome = messagesEl.querySelector('.chat-welcome');
+        if (welcome) welcome.remove();
+
+        var el = document.createElement('div');
+        el.className = 'chat-msg ' + role;
+        el.textContent = text;
+        messagesEl.appendChild(el);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+
+      function showTyping() {
+        var el = document.createElement('div');
+        el.className = 'chat-typing';
+        el.id = 'chat-typing';
+        el.innerHTML = '<span></span><span></span><span></span>';
+        messagesEl.appendChild(el);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+
+      function hideTyping() {
+        var el = document.getElementById('chat-typing');
+        if (el) el.remove();
+      }
+
+      function setLocked(locked) {
+        isBusy = locked;
+        input.disabled = locked;
+        sendBtn.disabled = locked;
+      }
+
+      // Called once intake is complete — replaces the input area with a thank-you note
+      function lockIntakeComplete() {
+        intakeDone = true;
+        var inputArea = document.getElementById('chat-input-area');
+        inputArea.innerHTML = '<p style="font-size:12px;color:var(--muted);text-align:center;padding:4px 8px;line-height:1.6;">Thank you — watch your inbox.</p>';
+      }
+
+      // Fire-and-forget POST to /api/generate-proposal
+      function submitProposal(intakeData) {
+        fetch('/api/generate-proposal', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ conversation: history, intake: intakeData })
+        }).catch(function (err) {
+          console.error('Proposal submission error:', err);
+        });
+      }
+
+      async function sendMessage() {
+        if (isBusy || intakeDone) return;
+        var text = input.value.trim();
+        if (!text) return;
+
+        input.value = '';
+        setLocked(true);
+
+        addMessage(text, 'user');
+        history.push({ role: 'user', content: text });
+        showTyping();
+
+        try {
+          var res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messages: history })
+          });
+
+          var data = await res.json();
+          hideTyping();
+
+          if (data.reply) {
+            addMessage(data.reply, 'bot');
+            history.push({ role: 'assistant', content: data.reply });
+
+            if (data.intakeComplete && data.intakeData) {
+              submitProposal(data.intakeData);
+              lockIntakeComplete();
+              return; // skip re-enabling input
+            }
+          } else {
+            addMessage('Sorry, something went wrong. Please try again.', 'bot');
+          }
+        } catch (err) {
+          hideTyping();
+          addMessage('Could not reach the server. Make sure server.js is running on port 3000.', 'bot');
+        }
+
+        setLocked(false);
+        input.focus();
+      }
+
+      sendBtn.addEventListener('click', sendMessage);
+
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+    })();
+  </script>
+</body>
+
+</html>
