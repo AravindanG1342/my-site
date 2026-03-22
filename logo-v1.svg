@@ -1,0 +1,41 @@
+<svg viewBox="0 0 300 72" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Field Notes — Birds of South India">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- Bird mark: long-billed bird silhouette (bee-eater style), facing right -->
+  <g fill="#b8882a">
+    <!-- Body + head + bill -->
+    <path d="M 6,24 C 6,13 20,5 36,5 C 50,3 60,8 64,14 L 72,21 74,24 72,27 L 62,30 C 50,36 30,38 14,36 C 8,34 6,29 6,24 Z"
+          transform="translate(4, 11)"/>
+    <!-- Tail pin -->
+    <path d="M 6,21 L 0,24 L 6,27 Z"
+          transform="translate(4, 11)"/>
+  </g>
+
+  <!-- Vertical separator -->
+  <line x1="98" y1="18" x2="98" y2="54" stroke="#b8882a" stroke-width="0.75" opacity="0.45"/>
+
+  <!-- Wordmark group -->
+  <g transform="translate(112, 0)">
+    <!-- Primary wordmark -->
+    <text
+      x="0" y="38"
+      font-family="'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+      font-size="21"
+      font-weight="300"
+      letter-spacing="5"
+      fill="currentColor">FIELD NOTES</text>
+
+    <!-- Tagline -->
+    <text
+      x="1" y="54"
+      font-family="'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+      font-size="8.5"
+      font-weight="300"
+      letter-spacing="2.8"
+      fill="#b8882a">BIRDS OF SOUTH INDIA</text>
+  </g>
+</svg>
