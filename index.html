@@ -312,6 +312,23 @@
       display: block;
     }
 
+    .modal-photo2-wrap {
+      border-top: 1px solid var(--border);
+    }
+
+    .modal-photo2-label {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 10px 14px 8px;
+    }
+
+    .modal-photo2 {
+      min-height: 200px;
+      max-height: 260px;
+    }
+
     .modal-content {
       padding: 40px 36px;
       display: flex;
@@ -700,7 +717,7 @@
     <div class="header-meta">
       <span>Aravindan Gopalakrishnan</span>
       <span class="dot"></span>
-      <span>Bangalore · Karnataka · Kerala</span>
+      <span>Bangalore · Karnataka · Kerala · Sri Lanka</span>
       <span class="dot"></span>
       <span id="species-count">— species</span>
     </div>
@@ -712,13 +729,14 @@
     <button class="filter-btn" data-filter="Bangalore">Bangalore</button>
     <button class="filter-btn" data-filter="Karnataka">Karnataka</button>
     <button class="filter-btn" data-filter="Kerala">Kerala</button>
+    <button class="filter-btn" data-filter="Sri Lanka">Sri Lanka</button>
   </div>
 
   <div class="gallery" id="gallery"></div>
 
   <section class="about">
     <div class="about-photo-wrap">
-      <img class="about-photo" src="Aravindan%20Profile.jpeg" alt="Aravindan Gopalakrishnan">
+      <img class="about-photo" src="my-site/Aravindan%20Profile.jpeg" alt="Aravindan Gopalakrishnan">
     </div>
     <div class="about-content">
       <p class="about-eyebrow">About</p>
@@ -742,6 +760,10 @@
     <div class="modal" id="modal">
       <div class="modal-photo-wrap">
         <img class="modal-photo" id="modal-photo" src="" alt="">
+        <div class="modal-photo2-wrap" id="modal-photo2-wrap" style="display:none">
+          <p class="modal-photo2-label">Also sighted</p>
+          <img class="modal-photo modal-photo2" id="modal-photo2" src="" alt="">
+        </div>
       </div>
       <div class="modal-content">
         <p class="modal-eyebrow" id="modal-region"></p>
@@ -766,9 +788,36 @@
     // ─────────────────────────────────────────────────────────────────────────
     // SPECIES DATA — edit this section to update notes, regions, or Wikipedia links
     // ─────────────────────────────────────────────────────────────────────────
-    const PHOTO_DIR = "Bird Photos Sample Mar 22 2026/";
+    const PHOTO_DIR = "https://res.cloudinary.com/dyfj9np6i/image/upload/bird-gallery/";
 
     const BIRDS = [
+      {
+        common: "Purple Sunbird",
+        scientific: "Cinnyris asiaticus",
+        region: "Bangalore",
+        photo: "DSC_1708.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Purple_sunbird",
+        note: "The male Purple Sunbird is iridescent and unmissable. The female is quieter: olive-brown above, pale yellow below, with the same long curved bill but none of the glitter. This one was working through a cluster of red flowers — methodical, efficient, unconcerned. Sunbirds hover occasionally, but mostly they land and probe, moving from flower to flower with the seriousness of a bird that has work to do.",
+        uncertain: null
+      },
+      {
+        common: "Oriental Magpie-Robin",
+        scientific: "Copsychus saularis",
+        region: "Bangalore",
+        photo: "DSC_1779.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Oriental_magpie-robin",
+        note: "Bold black above, white below, with a long tail held upright when alert — there is no mistaking this bird. It is common in Bangalore gardens, but it never becomes ordinary. The male sings from a prominent perch: loud, varied, one of the best songsters in the garden. This one was sitting on a branch in the late morning, absolutely still, as though it knew the frame it was making.",
+        uncertain: null
+      },
+      {
+        common: "Jerdon's Sunbird",
+        scientific: "Aethopyga jerdoni",
+        region: "Kerala",
+        photo: "DSC_1207 2.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Crimson-backed_sunbird",
+        note: "A Western Ghats endemic. This male was nectaring on a large orange flower in Karnataka — the iridescent crimson and green of his plumage catching the light differently with every small movement. Named after the naturalist Thomas C. Jerdon, who documented so much of South India's wildlife in the mid-nineteenth century. A bird of forested hillsides and well-wooded gardens near the Ghats.",
+        uncertain: null
+      },
       {
         common: "Green Bee-eater",
         scientific: "Merops orientalis",
@@ -779,27 +828,18 @@
         uncertain: null
       },
       {
-        common: "White-throated Kingfisher",
-        scientific: "Halcyon smyrnensis",
-        region: "Karnataka",
-        photo: "DSC03698.JPG",
-        wiki: "https://en.wikipedia.org/wiki/White-throated_kingfisher",
-        note: "You hear the loud, laughing call first — then catch a flash of electric blue disappearing into the trees. This one stayed. Despite its name, it hunts far from water just as often as near it: lizards, large insects, whatever moves below its perch.",
-        uncertain: null
-      },
-      {
-        common: "Yellow-eyed Babbler",
-        scientific: "Chrysomma sinense",
+        common: "White-browed Bulbul",
+        scientific: "Pycnonotus luteolus",
         region: "Karnataka",
         photo: "DSC03310.JPG",
-        wiki: "https://en.wikipedia.org/wiki/Yellow-eyed_babbler",
-        note: "This bird is usually just a sound — a persistent buzzing from deep inside a thorny bush. Getting it out in the open, perched cleanly like this, felt like a small victory. The yellow eye, up close, is genuinely startling.",
+        wiki: "https://en.wikipedia.org/wiki/White-browed_bulbul",
+        note: "A bird of scrubby edges and garden hedges. The white supercilium — the bold stripe above the eye — gives it a permanently alert expression. Easy to overlook alongside the more conspicuous Red-vented Bulbul, but worth stopping for: it has a distinctive, bubbling call and a neat, compact quality that the more common cousin lacks.",
         uncertain: null
       },
       {
         common: "Malabar Grey Hornbill",
         scientific: "Ocyceros griseus",
-        region: "Karnataka",
+        region: "Kerala",
         photo: "DSC_0769.JPG",
         wiki: "https://en.wikipedia.org/wiki/Malabar_grey_hornbill",
         note: "I heard it long before I saw it. The call is nasal, insistent, and carries deep into the forest. What I did not expect was how still it would sit once I found it — long enough for this shot. The female of this species seals herself inside a tree hollow to brood, leaving a gap just wide enough for the male to pass food through.",
@@ -826,7 +866,7 @@
       {
         common: "Rufous Treepie",
         scientific: "Dendrocitta vagabunda",
-        region: "Karnataka",
+        region: "Kerala",
         photo: "DSC_0705.JPG",
         wiki: "https://en.wikipedia.org/wiki/Rufous_treepie",
         note: "Loud, confident, and impossible to ignore. The Rufous Treepie moves through the trees in a small noisy group, announcing itself constantly. It also mimics other birds with unnerving accuracy — you think you have heard something rare, and then the treepie gives itself away.",
@@ -837,8 +877,9 @@
         scientific: "Bubulcus ibis",
         region: "Karnataka",
         photo: "DSC03309.JPG",
+        photo2: "DSC02524.JPG",
         wiki: "https://en.wikipedia.org/wiki/Cattle_egret",
-        note: "A bird that has figured out how to go everywhere. Originally from Africa and Asia, it has since spread to every continent except Antarctica — following cattle, farming equipment, anything that disturbs the ground and sends insects flying. Here it is in a wildflower meadow in Karnataka, in full breeding plumage.",
+        note: "A bird that has figured out how to go everywhere. Originally from Africa and Asia, it has since spread to every continent except Antarctica — following cattle, farming equipment, anything that disturbs the ground and sends insects flying. Here it is in a wildflower meadow in Karnataka, in full breeding plumage. The second photograph shows it doing exactly what the name promises — riding on the back of a cow, waiting for the animal's hooves to flush insects from the grass.",
         uncertain: null
       },
       {
@@ -872,9 +913,9 @@
         common: "Indian Peafowl",
         scientific: "Pavo cristatus",
         region: "Karnataka",
-        photo: "DSC03610.JPG",
+        photo: "DSC_1574.JPG",
         wiki: "https://en.wikipedia.org/wiki/Indian_peafowl",
-        note: "Everyone knows the male in full display. This is the rarer sight — male and female together, resting, with no performance intended. The female is a quieter bird in every sense, and often the more interesting one to watch.",
+        note: "A male standing on a tiled rooftop in Karnataka — entirely at ease, as though the roof were a natural extension of his territory. The train of feathers, folded and trailing behind him, is longer than his body. In display it fans into the famous circle of eyes; at rest, it is simply a remarkable weight to carry through the world.",
         uncertain: null
       },
       {
@@ -901,16 +942,7 @@
         region: "Karnataka",
         photo: "DSC03629.JPG",
         wiki: "https://en.wikipedia.org/wiki/Common_greenshank",
-        note: "Five of them, standing on a beach with the composure of seasoned travellers — which they are. These birds breed in northern Europe and Siberia and spend our winter here. I find something quietly moving about that: birds that have crossed continents, standing on a Karnataka beach.",
-        uncertain: null
-      },
-      {
-        common: "Indian Pond Heron",
-        scientific: "Ardeola grayii",
-        region: "Karnataka",
-        photo: "DSC03680.JPG",
-        wiki: "https://en.wikipedia.org/wiki/Indian_pond_heron",
-        note: "You walk past it a hundred times before you notice it. In this plumage — the streaked brown of the non-breeding season — it is nearly invisible at the water's edge. Then it takes off, and the wings are pure white. It is one of the best surprises in Indian birding.",
+        note: "Five of them, standing on the beach at Karwar with the composure of seasoned travellers — which they are. These birds breed in northern Europe and Siberia and spend our winter here. I find something quietly moving about that: birds that have crossed continents, standing on a Karnataka beach in October.",
         uncertain: null
       },
       {
@@ -927,6 +959,7 @@
         scientific: "Myophonus horsfieldii",
         region: "Kerala",
         photo: "DSC_0816.JPG",
+        photo2: "DSC_0823.JPG",
         wiki: "https://en.wikipedia.org/wiki/Malabar_whistling_thrush",
         note: "It is called the Whistling Schoolboy — a name earned by the loud, unhurried whistling that echoes along rocky hill streams in the Western Ghats. The sound carries much further than you would expect from a bird this size. This one was at Kuttikanam in Kerala, doing exactly that.",
         uncertain: null
@@ -965,6 +998,88 @@
         photo: "DSC02666.JPG",
         wiki: "https://en.wikipedia.org/wiki/Indian_white-eye",
         note: "A bird so small and so fast that most photographs of it are a yellow-green blur. This one paused, briefly, in some delicate foliage, and the white ring around the eye caught the light just right. Worth every patient minute.",
+        uncertain: null
+      },
+      {
+        common: "House Sparrow",
+        scientific: "Passer domesticus",
+        region: "Sri Lanka",
+        photo: "DSC_1466.JPG",
+        wiki: "https://en.wikipedia.org/wiki/House_sparrow",
+        note: "Once utterly common — the background noise of every Indian town — and now quietly declining in urban areas. This male was perched on a globe lamp in Bangalore, looking out with the confidence of a bird that has lived alongside humans for thousands of years. In some neighbourhoods I grew up in, I no longer hear them.",
+        uncertain: null
+      },
+      {
+        common: "Asian Openbill",
+        scientific: "Anastomus oscitans",
+        region: "Sri Lanka",
+        photo: "DSC_1602.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Asian_openbill",
+        note: "At a distance it looks like any large white stork. Then you notice the bill: closed, but with a distinctive gap in the middle — not a defect, but a design feature. That opening lets the bird grip and extract apple snails from shallow water, its preferred food. I found this one wading through a wetland at Hirekitiya in Sri Lanka, completely unhurried, doing exactly what it is built for.",
+        uncertain: null
+      },
+      {
+        common: "Pied Bushchat",
+        scientific: "Saxicola caprata",
+        region: "Karnataka",
+        photo: "DSC04545.JPG",
+        photo2: "464A1C75-0644-44D3-9A93-54CCB46C5D4B.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Pied_bushchat",
+        note: "The male is a bird that makes itself known — jet black with a bold white shoulder patch, perched at the tip of every grass stalk and shrub in open scrub country. The female, shown in the second photograph, is quieter in every way: brown and rust, easily overlooked. Both were in the same patch of Karnataka scrubland, going about their business with complete indifference to each other.",
+        uncertain: null
+      },
+      {
+        common: "Plain Prinia",
+        scientific: "Prinia inornata",
+        region: "Karnataka",
+        photo: "DSC_1911.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Plain_prinia",
+        note: "Small and restless, the Plain Prinia is a bird of open grassland and scrubby edges. It holds its tail cocked and moves through low vegetation with a nervous energy that makes it difficult to photograph cleanly. This one settled briefly on a rusted iron frame — long enough for a frame. The most widespread of the prinia family across the Karnataka plains.",
+        uncertain: null
+      },
+      {
+        common: "Spot-billed Pelican",
+        scientific: "Pelecanus philippensis",
+        region: "Karnataka",
+        photo: "DSC04670.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Spot-billed_pelican",
+        note: "Ranganathittu in the breeding season is one of those places that simply does not prepare you. The pelicans colonise the small rocky islands in the middle of the river, and the noise and movement of dozens of them at once — nesting, preening, calling — is overwhelming. The Spot-billed Pelican is large and ungainly on land. In the air, it becomes something else entirely.",
+        uncertain: null
+      },
+      {
+        common: "Common Kingfisher",
+        scientific: "Alcedo atthis",
+        region: "Kerala",
+        photo: "DSC04732.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Common_kingfisher",
+        note: "The smallest of the kingfishers, and the most jewelled. It sat absolutely still above the water at Kottayam, watching the surface below with the focus of a bird that has one job and does it perfectly. The electric blue of the back is almost unreal — you keep looking to make sure you saw it correctly. Then it drops, and it is gone.",
+        uncertain: null
+      },
+      {
+        common: "Scaly-breasted Munia",
+        scientific: "Lonchura punctulata",
+        region: "Kerala",
+        photo: "DSC04746.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Scaly-breasted_munia",
+        note: "The adult is unmistakable once you have seen it — chestnut-brown above, with a dense black-and-white scalloped pattern across the breast that looks almost embroidered. The juvenile alongside it is plain brown, giving no hint of what it will become. Both were on a wire in Kottayam, in the easy company that munias always seem to keep.",
+        uncertain: null
+      },
+      {
+        common: "Tricolored Munia",
+        scientific: "Lonchura malacca",
+        region: "Kerala",
+        photo: "DSC04749.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Tricolored_munia",
+        note: "Three distinct colours, unmistakably arranged: black head, chestnut back, white belly. The Tricolored Munia lacks the anonymity of its plainer relatives — this is a munia that announces itself. This one was perched on a wire in Kottayam, in the open, completely unbothered. Found in grassland and reedbed edges, often in small flocks, always on the move.",
+        uncertain: null
+      },
+      {
+        common: "Jungle Babbler",
+        scientific: "Argya striata",
+        region: "Kerala",
+        photo: "DSC04685.JPG",
+        wiki: "https://en.wikipedia.org/wiki/Jungle_babbler",
+        note: "Rarely seen alone. The Jungle Babbler moves in loose, noisy parties of six to ten — earning the old name 'Seven Sisters', though the number is rarely exact. Three of them here, huddled together on a branch in Kochi, as they always seem to be: close, communicative, and cheerfully indifferent to anything that does not interest the group.",
         uncertain: null
       }
     ];
@@ -1041,6 +1156,15 @@
         uncertainWrap.style.display = 'block';
       } else {
         uncertainWrap.style.display = 'none';
+      }
+
+      const photo2Wrap = document.getElementById('modal-photo2-wrap');
+      if (bird.photo2) {
+        document.getElementById('modal-photo2').src = PHOTO_DIR + bird.photo2;
+        document.getElementById('modal-photo2').alt = bird.common;
+        photo2Wrap.style.display = 'block';
+      } else {
+        photo2Wrap.style.display = 'none';
       }
 
       document.getElementById('modal-overlay').classList.add('open');

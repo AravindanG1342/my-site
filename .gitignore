@@ -1,3 +1,5 @@
 node_modules/
 .env
 .vercel
+.DS_Store
+Bird Photos Sample Mar 22 2026/
