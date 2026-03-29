@@ -479,7 +479,7 @@
       padding: 64px 48px;
       border-top: 1px solid var(--border);
       display: grid;
-      grid-template-columns: 200px 1fr;
+      grid-template-columns: 1fr;
       gap: 56px;
       align-items: start;
     }
@@ -735,17 +735,15 @@
   <div class="gallery" id="gallery"></div>
 
   <section class="about">
-    <div class="about-photo-wrap">
-      <img class="about-photo" src="my-site/Aravindan%20Profile.jpeg" alt="Aravindan Gopalakrishnan">
-    </div>
     <div class="about-content">
       <p class="about-eyebrow">About</p>
       <h2 class="about-name">Aravindan Gopalakrishnan</h2>
       <div class="about-bio">
         <p>I am a product manager based in Bangalore. Birds are how I slow down — a reason to be outdoors, patient, and
           paying attention.</p>
-        <p>I photograph them across Bangalore, the forests of Karnataka, and along the Kerala coast. This gallery is my
-          personal record of what I have found: one photograph and a few notes for each species.</p>
+        <p>I photograph them mostly in my backyard, neighborhood, nearby keres (lakes) and on trips where I manage to
+          take my camera along. The joy is in simply observing birds when you can, the photos are a bonus. Hope you
+          enjoy these photos!</p>
       </div>
     </div>
   </section>
@@ -792,12 +790,12 @@
 
     const BIRDS = [
       {
-        common: "Purple Sunbird",
-        scientific: "Cinnyris asiaticus",
-        region: "Bangalore",
-        photo: "DSC_1708.jpg",
-        wiki: "https://en.wikipedia.org/wiki/Purple_sunbird",
-        note: "The male Purple Sunbird is iridescent and unmissable. The female is quieter: olive-brown above, pale yellow below, with the same long curved bill but none of the glitter. This one was working through a cluster of red flowers — methodical, efficient, unconcerned. Sunbirds hover occasionally, but mostly they land and probe, moving from flower to flower with the seriousness of a bird that has work to do.",
+        common: "Malabar Grey Hornbill",
+        scientific: "Ocyceros griseus",
+        region: "Kerala",
+        photo: "DSC_0769.jpg",
+        wiki: "https://en.wikipedia.org/wiki/Malabar_grey_hornbill",
+        note: "I heard it long before I saw it. The call is nasal, insistent, and carries deep into the forest. What I did not expect was how still it would sit once I found it — long enough for this shot. The female of this species seals herself inside a tree hollow to brood, leaving a gap just wide enough for the male to pass food through.",
         uncertain: null
       },
       {
@@ -810,12 +808,21 @@
         uncertain: null
       },
       {
-        common: "Jerdon's Sunbird",
-        scientific: "Aethopyga jerdoni",
+        common: "Loten's Sunbird",
+        scientific: "Cinnyris lotenius",
         region: "Kerala",
         photo: "DSC_1207_2.jpg",
-        wiki: "https://en.wikipedia.org/wiki/Crimson-backed_sunbird",
-        note: "A Western Ghats endemic. This male was nectaring on a large orange flower in Karnataka — the iridescent crimson and green of his plumage catching the light differently with every small movement. Named after the naturalist Thomas C. Jerdon, who documented so much of South India's wildlife in the mid-nineteenth century. A bird of forested hillsides and well-wooded gardens near the Ghats.",
+        wiki: "https://en.wikipedia.org/wiki/Loten%27s_sunbird",
+        note: "I chanced upon this Loten's sunbird while on a stroll in Kochi. While Purple and Purple Rumped sunbirds are common in my Bengaluru backyard, Loten's sunbirds aren't. It was a delight to watch this male perch so sunbird-like on the stem of a Bird of Paradise — just enough for me to take a few shots. I just wish I had a better background than metal construction scaffolding though.",
+        uncertain: null
+      },
+      {
+        common: "Purple Sunbird",
+        scientific: "Cinnyris asiaticus",
+        region: "Bangalore",
+        photo: "DSC_1708.jpg",
+        wiki: "https://en.wikipedia.org/wiki/Purple_sunbird",
+        note: "The male Purple Sunbird is iridescent and unmissable. The female is quieter: olive-brown above, pale yellow below, with the same long curved bill but none of the glitter. This one was working through a cluster of red flowers — methodical, efficient, unconcerned. Sunbirds hover occasionally, but mostly they land and probe, moving from flower to flower with the seriousness of a bird that has work to do.",
         uncertain: null
       },
       {
@@ -834,15 +841,6 @@
         photo: "DSC03310.jpg",
         wiki: "https://en.wikipedia.org/wiki/White-browed_bulbul",
         note: "A bird of scrubby edges and garden hedges. The white supercilium — the bold stripe above the eye — gives it a permanently alert expression. Easy to overlook alongside the more conspicuous Red-vented Bulbul, but worth stopping for: it has a distinctive, bubbling call and a neat, compact quality that the more common cousin lacks.",
-        uncertain: null
-      },
-      {
-        common: "Malabar Grey Hornbill",
-        scientific: "Ocyceros griseus",
-        region: "Kerala",
-        photo: "DSC_0769.jpg",
-        wiki: "https://en.wikipedia.org/wiki/Malabar_grey_hornbill",
-        note: "I heard it long before I saw it. The call is nasal, insistent, and carries deep into the forest. What I did not expect was how still it would sit once I found it — long enough for this shot. The female of this species seals herself inside a tree hollow to brood, leaving a gap just wide enough for the male to pass food through.",
         uncertain: null
       },
       {
@@ -903,10 +901,10 @@
       {
         common: "Jungle Myna",
         scientific: "Acridotheres fuscus",
-        region: "Bangalore",
+        region: "Tamil Nadu",
         photo: "DSC_0688.jpg",
         wiki: "https://en.wikipedia.org/wiki/Jungle_myna",
-        note: "These two landed on a clay water pot in the garden and stayed long enough for a study. The one on the right, with the small tuft on its forehead, is the Jungle Myna. Its neighbour on the left is the Common Myna. They are often found together, going about their business with complete indifference to each other.",
+        note: "I found these Mynas hanging out over a quiet drink on a Sunday morning in Sim's Park in Coonoor.",
         uncertain: null
       },
       {
@@ -963,15 +961,6 @@
         wiki: "https://en.wikipedia.org/wiki/Malabar_whistling_thrush",
         note: "It is called the Whistling Schoolboy — a name earned by the loud, unhurried whistling that echoes along rocky hill streams in the Western Ghats. The sound carries much further than you would expect from a bird this size. This one was at Kuttikanam in Kerala, doing exactly that.",
         uncertain: null
-      },
-      {
-        common: "Indian Robin",
-        scientific: "Copsychus fulicatus",
-        region: "Karnataka",
-        photo: "DSC_1282.jpg",
-        wiki: "https://en.wikipedia.org/wiki/Indian_robin",
-        note: "A scrubby, open-country bird that has mastered the art of looking important. It runs a few paces, stops, looks around, runs again — with great seriousness of purpose. The rich chestnut-red underparts of the male are striking when you are close enough to see them.",
-        uncertain: "ID to be confirmed — standing on ploughed red laterite soil. Could also be a Paddyfield Pipit."
       },
       {
         common: "Munias",
@@ -1428,11 +1417,11 @@
   <div id="chat-widget">
     <div id="chat-panel" role="dialog" aria-label="Chat with Aravindan's assistant">
       <div id="chat-header">
-        <span class="chat-header-title">Ask me anything</span>
+        <span class="chat-header-title">Get in touch</span>
         <button id="chat-close" aria-label="Close chat">&#215;</button>
       </div>
       <div id="chat-messages">
-        <p class="chat-welcome">Ask me about the birds in this gallery — where I spotted them, what they were doing, or what to look for. Happy to chat.</p>
+        <p class="chat-welcome">Have a question or just want to say hello? Leave your name and message and I'll get back to you.</p>
       </div>
       <div id="chat-input-area">
         <input id="chat-input" type="text" placeholder="What would you like to know?" autocomplete="off">
@@ -1444,7 +1433,7 @@
       <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
       </svg>
-      Ask me anything
+      Get in touch
     </button>
   </div>
 
@@ -1459,14 +1448,24 @@
 
       var isOpen = false;
       var isBusy = false;
-      var intakeDone = false;
-      var history = []; // full conversation history sent to the API on every turn
+      var step = 0; // 0 = awaiting name, 1 = awaiting message, 2 = done
+      var visitorName = '';
+      var greeted = false;
 
       function openChat() {
         isOpen = true;
         panel.classList.add('open');
         toggle.setAttribute('aria-expanded', 'true');
-        if (!intakeDone) input.focus();
+        if (!greeted) {
+          greeted = true;
+          setTimeout(function () {
+            addMessage("Hi there! What's your name?", 'bot');
+            input.placeholder = 'Your name…';
+            input.focus();
+          }, 250);
+        } else {
+          input.focus();
+        }
       }
 
       function closeChat() {
@@ -1484,7 +1483,6 @@
       function addMessage(text, role) {
         var welcome = messagesEl.querySelector('.chat-welcome');
         if (welcome) welcome.remove();
-
         var el = document.createElement('div');
         el.className = 'chat-msg ' + role;
         el.textContent = text;
@@ -1506,71 +1504,50 @@
         if (el) el.remove();
       }
 
-      function setLocked(locked) {
-        isBusy = locked;
-        input.disabled = locked;
-        sendBtn.disabled = locked;
-      }
-
-      // Called once intake is complete — replaces the input area with a thank-you note
-      function lockIntakeComplete() {
-        intakeDone = true;
+      function lockDone() {
+        step = 2;
         var inputArea = document.getElementById('chat-input-area');
-        inputArea.innerHTML = '<p style="font-size:12px;color:var(--muted);text-align:center;padding:4px 8px;line-height:1.6;">Thank you — watch your inbox.</p>';
-      }
-
-      // Fire-and-forget POST to /api/generate-proposal
-      function submitProposal(intakeData) {
-        fetch('/api/generate-proposal', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ conversation: history, intake: intakeData })
-        }).catch(function (err) {
-          console.error('Proposal submission error:', err);
-        });
+        inputArea.innerHTML = '<p style="font-size:12px;color:var(--muted);text-align:center;padding:4px 8px;line-height:1.6;">Message sent — I\'ll be in touch!</p>';
       }
 
       async function sendMessage() {
-        if (isBusy || intakeDone) return;
+        if (isBusy || step >= 2) return;
         var text = input.value.trim();
         if (!text) return;
 
         input.value = '';
-        setLocked(true);
-
         addMessage(text, 'user');
-        history.push({ role: 'user', content: text });
+
+        if (step === 0) {
+          visitorName = text;
+          step = 1;
+          setTimeout(function () {
+            addMessage('Thanks, ' + visitorName + '! What would you like to ask or share?', 'bot');
+            input.placeholder = 'Your message…';
+            input.focus();
+          }, 350);
+          return;
+        }
+
+        // step === 1: submit the message
+        isBusy = true;
+        input.disabled = true;
+        sendBtn.disabled = true;
         showTyping();
 
         try {
-          var res = await fetch('/api/chat', {
+          await fetch('/api/contact', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ messages: history })
+            body: JSON.stringify({ name: visitorName, message: text })
           });
-
-          var data = await res.json();
-          hideTyping();
-
-          if (data.reply) {
-            addMessage(data.reply, 'bot');
-            history.push({ role: 'assistant', content: data.reply });
-
-            if (data.intakeComplete && data.intakeData) {
-              submitProposal(data.intakeData);
-              lockIntakeComplete();
-              return; // skip re-enabling input
-            }
-          } else {
-            addMessage('Sorry, something went wrong. Please try again.', 'bot');
-          }
-        } catch (err) {
-          hideTyping();
-          addMessage('Could not reach the server. Make sure server.js is running on port 3000.', 'bot');
+        } catch (e) {
+          // silently continue — confirm regardless so the visitor isn't left hanging
         }
 
-        setLocked(false);
-        input.focus();
+        hideTyping();
+        addMessage('Thank you! I\'ll get back to you soon.', 'bot');
+        lockDone();
       }
 
       sendBtn.addEventListener('click', sendMessage);
